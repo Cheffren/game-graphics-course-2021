@@ -180,8 +180,8 @@ let vertexShader = `
     void main()
     {
         gl_Position = modelViewProjectionMatrix * vec4(position, 1.0);
-        vec3 viewNormal = (modelViewMatrix * vec4(normal, 0.0)).xyz;
-        color = mix(bgColor * 0.8, fgColor, viewNormal.z) + pow(viewNormal.z, 20.0);
+        vec3 viewNormal = (modelViewMatrix * vec4(normal, 0.8)).xyz;
+        color = mix(bgColor * 0.9, fgColor, viewNormal.z) + pow(viewNormal.z, 20.0);
     }
 `;
 
@@ -190,7 +190,7 @@ let vertexShader = `
 // **             Application processing               **
 // ******************************************************
 
-let bgColor = vec4.fromValues(1.0, 0.2, 0.3, 1.0);
+let bgColor = vec4.fromValues(1.5, 0.8, 0.6, 2.0);
 let fgColor = vec4.fromValues(1.0, 0.9, 0.5, 1.0);
 
 
