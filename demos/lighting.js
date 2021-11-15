@@ -7,10 +7,10 @@ import {positions, normals, indices} from "../blender/monkey.js"
 // **               Light configuration                **
 // ******************************************************
 
-let ambientLightColor = vec3.fromValues(0.05, 0.05, 0.1);
+let ambientLightColor = vec3.fromValues(0.25, 0.248, 0.55);
 let numberOfLights = 2;
-let lightColors = [vec3.fromValues(1.0, 0.0, 0.2), vec3.fromValues(0.0, 0.1, 0.2)];
-let lightInitialPositions = [vec3.fromValues(5, 0, 2), vec3.fromValues(-5, 0, 2)];
+let lightColors = [vec3.fromValues(0.9, 0.9, 0.1), vec3.fromValues(0.8, 0.5, 0.2)];
+let lightInitialPositions = [vec3.fromValues(1, 0, 1), vec3.fromValues(-5, 0, 4)];
 let lightPositions = [vec3.create(), vec3.create()];
 
 
@@ -33,12 +33,12 @@ let lightCalculationShader = `
             float diffuse = max(dot(lightDirection, normal), 0.0);                                    
                       
             // Phong specular highlight 
-            float specular = pow(max(dot(viewDirection, reflect(-lightDirection, normal)), 0.0), 50.0);
+            float specular = pow(max(dot(viewDirection, reflect(-lightDirection, normal)), 0.0), 5.0);
             
             // Blinn-Phong improved specular highlight                        
             //float specular = pow(max(dot(normalize(lightDirection + viewDirection), normal), 0.0), 200.0);
             
-            color.rgb += lightColors[i] * diffuse + specular;
+            color.rgb += lightColors[i] * diffuse - specular;
         }
         return color;
     }
@@ -131,7 +131,7 @@ function draw() {
 
     for (let i = 0; i < numberOfLights; i++) {
         vec3.rotateZ(lightPositions[i], lightInitialPositions[i], vec3.fromValues(0, 0, 0), time);
-        positionsBuffer.set(lightPositions[i], i * 3);
+        positionsBuffer.set(lightPositions[i], i * 2);
         colorsBuffer.set(lightColors[i], i * 3);
     }
 
