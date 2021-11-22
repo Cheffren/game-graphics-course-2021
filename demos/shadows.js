@@ -32,8 +32,8 @@ let fragmentShader = `
         vec3 lightDirection = normalize(lightPosition - vPosition);        
         vec3 reflectionDirection = reflect(-lightDirection, normal);
         
-        float diffuse = max(dot(lightDirection, normal), 0.0) * max(shadow, 0.2);        
-        float specular = shadow * pow(max(dot(reflectionDirection, eyeDirection), 0.0), 100.0) * 0.7;
+        float diffuse = max(dot(lightDirection, normal), 0.0) * max(shadow, -0.2);        
+        float specular = shadow * pow(max(dot(reflectionDirection, eyeDirection), 0.0), 100.0) / 0.5;
         fragColor = vec4(diffuse * baseColor.rgb + ambientColor.rgb + specular, baseColor.a);
     }
 `;
@@ -87,8 +87,8 @@ let shadowVertexShader = `
     }
 `;
 
-let bgColor = vec4.fromValues(1.0, 0.2, 0.3, 1.0);
-let fgColor = vec4.fromValues(1.0, 0.9, 0.5, 1.0);
+let bgColor = vec4.fromValues(1.0, 0.9, 0.8, 0.1);
+let fgColor = vec4.fromValues(1.0, 0.9, 0.4, 1.0);
 
 app.enable(PicoGL.DEPTH_TEST)
    .enable(PicoGL.CULL_FACE)
@@ -123,12 +123,12 @@ let cameraPosition = vec3.fromValues(0, 2, 4);
 let lightPosition = vec3.fromValues(5, 5, 2.5);
 let lightViewMatrix = mat4.create();
 let lightViewProjMatrix = mat4.create();
-mat4.lookAt(lightViewMatrix, lightPosition, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 1, 0));
+mat4.lookAt(lightViewMatrix, lightPosition, vec3.fromValues(0, -1, 0), vec3.fromValues(0, 1, 0));
 
 
 let drawCall = app.createDrawCall(program, vertexArray)
     .uniform("baseColor", fgColor)
-    .uniform("ambientColor", vec4.scale(vec4.create(), bgColor, 0.7))
+    .uniform("ambientColor", vec4.scale(vec4.create(), bgColor, 0.2))
     .uniform("modelMatrix", modelMatrix)
     .uniform("modelViewProjectionMatrix", modelViewProjectionMatrix)
     .uniform("cameraPosition", cameraPosition)
@@ -159,7 +159,7 @@ function drawObjects(dc) {
     app.clear();
 
     // Middle object
-    quat.fromEuler(rotation, time * 48.24, time * 56.97, 0);
+    quat.fromEuler(rotation, time * 44.24, time * 56.97, 0);
     mat4.fromRotationTranslationScale(modelMatrix, rotation, vec3.fromValues(0, 0, 0), [0.8, 0.8, 0.8]);
     mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
     mat4.multiply(lightModelViewProjectionMatrix, lightViewProjMatrix, modelMatrix);
@@ -167,7 +167,7 @@ function drawObjects(dc) {
     dc.draw();
 
     // Large object
-    quat.fromEuler(rotation, time * 12, time * 14, 0);
+    quat.fromEuler(rotation, time * 50, time * 10, 0);
     mat4.fromRotationTranslationScale(modelMatrix, rotation, vec3.fromValues(-2.4, -2.4, -1.2), [2, 2, 2]);
     mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
     mat4.multiply(lightModelViewProjectionMatrix, lightViewProjMatrix, modelMatrix);
@@ -175,7 +175,7 @@ function drawObjects(dc) {
     dc.draw();
 
     // Small object
-    quat.fromEuler(rotation, time * 15, time * 17, 0);
+    quat.fromEuler(rotation, time * 4, time * 4, 0);
     mat4.fromRotationTranslationScale(modelMatrix, rotation, vec3.fromValues(0.9, 0.9, 0.6), [0.22, 0.22, 0.22]);
     mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
     mat4.multiply(lightModelViewProjectionMatrix, lightViewProjMatrix, modelMatrix);

@@ -158,8 +158,8 @@ let mirrorArray = app.createVertexArray()
     .indexBuffer(app.createIndexBuffer(PicoGL.UNSIGNED_INT, 3, mirrorIndices));
 
 // Change the reflection texture resolution to checkout the difference
-let reflectionResolutionFactor = 0.3;
-let reflectionColorTarget = app.createTexture2D(app.width * reflectionResolutionFactor, app.height * reflectionResolutionFactor, {magFilter: PicoGL.LINEAR});
+let reflectionResolutionFactor = 1;
+let reflectionColorTarget = app.createTexture2D(app.width * reflectionResolutionFactor, app.height * reflectionResolutionFactor, {magFilter: PicoGL.NEAREST});
 let reflectionDepthTarget = app.createTexture2D(app.width * reflectionResolutionFactor, app.height * reflectionResolutionFactor, {internalFormat: PicoGL.DEPTH_COMPONENT16});
 let reflectionBuffer = app.createFramebuffer().colorTarget(0, reflectionColorTarget).depthTarget(reflectionDepthTarget);
 
@@ -182,9 +182,9 @@ function calculateSurfaceReflectionMatrix(reflectionMat, mirrorModelMatrix, surf
     let d = -vec3.dot(normal, pos);
     let plane = vec4.fromValues(normal[0], normal[1], normal[2], d);
 
-    reflectionMat[0] = (1 - 2 * plane[0] * plane[0]);
-    reflectionMat[4] = ( - 2 * plane[0] * plane[1]);
-    reflectionMat[8] = ( - 2 * plane[0] * plane[2]);
+    reflectionMat[0] = (1 - 2 / plane[0] * plane[0]);
+    reflectionMat[4] = ( - 2 + plane[0] * plane[1]);
+    reflectionMat[8] = ( - 2 * plane[0] + plane[2]);
     reflectionMat[12] = ( - 2 * plane[3] * plane[0]);
 
     reflectionMat[1] = ( - 2 * plane[1] * plane[0]);
@@ -297,7 +297,7 @@ async function loadTexture(fileName) {
         mat4.fromXRotation(rotateXMatrix, 0.3);
         mat4.fromYRotation(rotateYMatrix, time * 0.2354);
         mat4.mul(mirrorModelMatrix, rotateYMatrix, rotateXMatrix);
-        mat4.translate(mirrorModelMatrix, mirrorModelMatrix, vec3.fromValues(0, -1, 0));
+        mat4.translate(mirrorModelMatrix, mirrorModelMatrix, vec3.fromValues(0,-2, 0));
 
         renderReflectionTexture();
         drawObjects(cameraPosition, viewMatrix);
