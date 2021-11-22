@@ -8,12 +8,14 @@
             body {
                 margin: 0;
                 background-color: black;
-                overflow: hidden;
                 color: white;
                 font-family: Tahoma,sans-serif;
             }
             p {
-                margin: 50px;
+                margin: 20px 50px;
+            }
+            ul {
+                margin: 10px 50px;
             }
             h1 {
                 color: #f90;
@@ -47,6 +49,8 @@
 
             const loadScript = window.location.search.substring(1);
             if (loadScript && loadScript.endsWith(".js")) {
+                document.getElementById("menu").style.display = "none";
+                document.body.style.overflow = "hidden";
                 document.title = loadScript + " - " + document.title;
 
                 let canvas = document.createElement("canvas");
@@ -62,8 +66,34 @@
                 import(loadScript);
             }
         </script>
-        <p>
-            <h1>Video Game Graphics Course</h1>
+        <div id="menu">
+            <h1>Video Game Graphics Course 2021</h1>
+            <h2>Assignment</h2>
+            <p>
+                Create a demo based on examples, which would combine several rendering algorithms together.<br>
+                Your work must be pushed to your forked github. It will be 50% of your result mark.
+            </p>
+            <p>
+                Your demo must include atleast one 3d model (your own)<br>
+                atleast one UV-mapped texture (your own)<br>
+                one of the lighting models:
+            </p>
+            <ul>
+                <li>Phong lighting model</li>
+                <li>Blinn-Phong lighting model</li>
+                <li>Lambert lighting model</li>
+            </ul>
+            <p>and any two of the following algorithms:</p>
+            <ul>
+                <li>Cubemap reflection</li>
+                <li>Planar reflection</li>
+                <li>Shadowmaps</li>
+                <li>Any post-processing</li>
+            </ul>
+            <p>
+                Use demos/assignment.js as a boilerplate template:
+                <a href="?./demos/assignment.js">Assignment</a>
+            </p>
             <h2>Slides</h2>
             <p>
                 <a target="_blank" href="https://docs.google.com/presentation/d/17JN9MkPOFQ1eJwJuUsdYvhJqQ2nvRHDOCaAHoDjWVic/edit?usp=sharing">01 Introduction</a>
@@ -71,13 +101,22 @@
                 <a target="_blank" href="https://docs.google.com/presentation/d/1rGOKgFTPXNZzPlJfnSFJFSUdYksTbPS1MYEnPaEdDNA/edit?usp=sharing">03 GPU</a>
                 <a target="_blank" href="https://docs.google.com/presentation/d/1JCWcJ0c8TvsFzkUYuWjgJjcYDftt1NqX91TLRAwa-RY/edit?usp=sharing">04 Texturing</a>
                 <a target="_blank" href="https://docs.google.com/presentation/d/1DUjt1nVzONqGic8JVWbl5YDb38m4Br6N25jDEqYhnec/edit?usp=sharing">05 Lighting</a>
+                <a target="_blank" href="https://docs.google.com/presentation/d/14cvtBezVu19ML_A-bSB2JqLSB5f0k7NPngMh8GP8izw/edit?usp=sharing">06 Reflections</a>
+                <a target="_blank" href="https://docs.google.com/presentation/d/1BJqZFeQG8KTV419adKMNsWfbN7YMNz7NvXVIiQHB4E8/edit?usp=sharing">07 Shadows</a>
+            </p>
+            <h2>Tests</h2>
+            <p>
+                <a target="_blank" href="https://create.kahoot.it/details/ed987b4b-58dc-404b-aef7-610f8598c45d">02 Rendering</a>
+                <a target="_blank" href="https://create.kahoot.it/details/1da49f06-f4f9-4412-be68-a65de97b5731">03-04 GPU,Rendering</a>
             </p>
             <h2>Demos</h2>
             <p>
                 <a href="?./demos/simple-rendering.js">02 Simple rendering</a>
                 <a href="?./demos/texturing.js">04 Texturing</a>
                 <a href="?./demos/lighting.js">05 Lighting</a>
+                <a href="?./demos/reflections.js">06 Reflections</a>
+                <a href="?./demos/shadows.js">07 Shadows</a>
             </p>
-        </p>
+        </div>
     </body>
 </html>

@@ -1,5 +1,5 @@
 {
-  "name": "game-graphics-course-2020",
+  "name": "game-graphics-course-2021",
   "devDependencies": {
     "gl-matrix": "^3.3.0",
     "picogl": "^0.17.6"
