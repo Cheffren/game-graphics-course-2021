@@ -108,13 +108,13 @@ let postFragmentShader = `
         col = depthOfField(col, depth, v_position.xy);
 
         // Noise         
-        col.rgb += (2.0 - col.rgb) * random(v_position.xy) * 0.1;
+        col.rgb += (2.0 - col.rgb) * random(v_position.xy) * 0.02;
         
         // Contrast + Brightness
         col = pow(col, vec4(1.8)) * 0.8;
         
         // Color curves
-        col.rgb = col.rgb * vec3(1.2, 1.1, 1.0) + vec3(0.0, 0.05, 0.2);
+        //col.rgb = col.rgb * vec3(1.2, 1.1, 1.0) + vec3(0.0, 0.05, 0.2);
         
         // Ambient Occlusion
         //col = ambientOcclusion(col, depth, v_position.xy);                
@@ -192,10 +192,10 @@ async function loadTexture(fileName) {
         time = timestamp / 1000;
         if (!document.hasFocus()) return;
 
-        let cameraPosition = vec3.fromValues(0, 0, 9);
-        rotation += (time - previousTime) * 0.5;
+        let cameraPosition = vec3.fromValues(0, 0, 8);
+        rotation += (time - previousTime) * -0.8;
         mat4.perspective(projectionMatrix, Math.PI / 10, app.width / app.height, 0.05, 50.0);
-        mat4.lookAt(viewMatrix, cameraPosition, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 1, 0));
+        mat4.lookAt(viewMatrix, cameraPosition, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 4, 0));
         quat.fromEuler(modelRotation, Math.cos(rotation) * 20 - 90, Math.sin(rotation) * 20, 0)
         mat4.multiply(viewProjMatrix, projectionMatrix, viewMatrix);
 
@@ -209,20 +209,20 @@ async function loadTexture(fileName) {
            .enable(PicoGL.CULL_FACE)
            .clear();
 
-        drawCall.uniform("diffuseColor", vec4.fromValues(0.3, 0.0, 1.0, 1.0));
-        mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(-1.5, 0, -2));
+        drawCall.uniform("diffuseColor", vec4.fromValues(0.9, 0.0, 0.0, 0.9));
+        mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(-1, 0.5, -0));
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
         mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
         drawCall.draw();
 
-        drawCall.uniform("diffuseColor", vec4.fromValues(0.1, 1.0, 0.2, 1.0));
-        mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(0, 0, 0));
+        drawCall.uniform("diffuseColor", vec4.fromValues(0.8, 1.0, 0.2, 0.5));
+        mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(0, 0, -1));
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
         mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
         drawCall.draw();
 
-        drawCall.uniform("diffuseColor", vec4.fromValues(1.0, 0.0, 0.2, 1.0));
-        mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(1.5, 0, 2));
+        drawCall.uniform("diffuseColor", vec4.fromValues(0.0, 0.0, 0.2, 1.0));
+        mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(1, -0.5, -2));
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
         mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
         drawCall.draw();

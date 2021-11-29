@@ -136,4 +136,20 @@ export const indices = new Uint32Array([
     // right
     22, 21, 20,
     20, 23, 22,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ]);
