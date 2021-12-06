@@ -1,7 +1,7 @@
 import PicoGL from "../node_modules/picogl/build/module/picogl.js";
 import {mat4, vec3, vec4, quat} from "../node_modules/gl-matrix/esm/index.js";
 
-import {positions, normals, indices} from "../blender/monkey.js"
+import {positions, normals, indices} from "../blender/ball.js"
 
 let postPositions = new Float32Array([
     0.0, 1.0,
@@ -69,8 +69,9 @@ let postFragmentShader = `
     vec4 depthOfField(vec4 col, float depth, vec2 uv) {
         vec4 blur = vec4(0.0);
         float n = 0.0;
-        for (float u = -1.0; u <= 1.0; u += 0.4)    
-            for (float v = -1.0; v <= 1.0; v += 0.4) {
+        for (float u = -1.0; u <= 1.0; u += 0.4)   
+        //Dit is de for cycle voor blur 
+            for (float v = -1.0; v <= 1.0; v += 0.01) {
                 float factor = abs(depth - 0.995) * 350.0;
                 blur += texture(tex, uv + vec2(u, v) * factor * 0.02);
                 n += 1.0;
@@ -108,19 +109,19 @@ let postFragmentShader = `
         col = depthOfField(col, depth, v_position.xy);
 
         // Noise         
-        col.rgb += (2.0 - col.rgb) * random(v_position.xy) * 0.02;
+        // col.rgb += (2.0 - col.rgb) * random(v_position.xy) * 0.2;
         
         // Contrast + Brightness
-        col = pow(col, vec4(1.8)) * 0.8;
+        //col = pow(col, vec4(1.8)) * 0.9;
         
         // Color curves
-        //col.rgb = col.rgb * vec3(1.2, 1.1, 1.0) + vec3(0.0, 0.05, 0.2);
+        col.rgb = col.rgb * vec3(1.2, 1.1, 1.0) + vec3(0.0, 0.05, 0.2);
         
         // Ambient Occlusion
         //col = ambientOcclusion(col, depth, v_position.xy);                
         
         // Invert
-        //col.rgb = 1.0 - col.rgb;
+        col.rgb = 1.0 - col.rgb;
         
         // Fog
         //col.rgb = col.rgb + vec3((depth - 0.992) * 200.0);         
@@ -147,7 +148,7 @@ async function loadTexture(fileName) {
 }
 
 (async () => {
-    let bgColor = vec4.fromValues(0.1, 0.1, 0.1, 1.0);
+    let bgColor = vec4.fromValues(0.7, 0.3, 0.2, 1.0);
     app.clearColor(bgColor[0], bgColor[1], bgColor[2], bgColor[3]);
 
     let program = app.createProgram(vertexShader.trim(), fragmentShader.trim());
@@ -182,7 +183,7 @@ async function loadTexture(fileName) {
     let postDrawCall = app.createDrawCall(postProgram, postArray)
         .texture("tex", colorTarget)
         .texture("depthTex", depthTarget)
-        .texture("noiseTex", app.createTexture2D(await loadTexture("noise.png")));
+        .texture("noiseTex", app.createTexture2D(await loadTexture("ruis.gif")));
 
     let time = 0, previousTime = 0, rotation = 0;
 
@@ -209,19 +210,19 @@ async function loadTexture(fileName) {
            .enable(PicoGL.CULL_FACE)
            .clear();
 
-        drawCall.uniform("diffuseColor", vec4.fromValues(0.9, 0.0, 0.0, 0.9));
+        drawCall.uniform("diffuseColor", vec4.fromValues(0.4, 0.6, 0.0, 0.9));
         mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(-1, 0.5, -0));
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
         mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
         drawCall.draw();
 
-        drawCall.uniform("diffuseColor", vec4.fromValues(0.8, 1.0, 0.2, 0.5));
+        drawCall.uniform("diffuseColor", vec4.fromValues(0.1, 1.0, 0.2, 0.5));
         mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(0, 0, -1));
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
         mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
         drawCall.draw();
 
-        drawCall.uniform("diffuseColor", vec4.fromValues(0.0, 0.0, 0.2, 1.0));
+        drawCall.uniform("diffuseColor", vec4.fromValues(1.0, 1.0, 1.0, 1.0));
         mat4.fromRotationTranslation(modelMatrix, modelRotation, vec3.fromValues(1, -0.5, -2));
         mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
         mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);

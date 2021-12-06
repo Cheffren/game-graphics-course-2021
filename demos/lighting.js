@@ -33,10 +33,10 @@ let lightCalculationShader = `
             float diffuse = max(dot(lightDirection, normal), 0.0);                                    
                       
             // Phong specular highlight 
-            float specular = pow(max(dot(viewDirection, reflect(-lightDirection, normal)), 0.0), 5.0);
+            //float specular = pow(max(dot(viewDirection, reflect(-lightDirection, normal)), 0.0), 5.0);
             
             // Blinn-Phong improved specular highlight                        
-            //float specular = pow(max(dot(normalize(lightDirection + viewDirection), normal), 0.0), 200.0);
+            float specular = pow(max(dot(normalize(lightDirection + viewDirection), normal), 0.0), 200.0);
             
             color.rgb += lightColors[i] * diffuse - specular;
         }

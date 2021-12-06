@@ -3,7 +3,7 @@
 import PicoGL from "../node_modules/picogl/build/module/picogl.js";
 import {mat4, vec3, vec4, quat} from "../node_modules/gl-matrix/esm/index.js";
 
-import {positions, normals, indices} from "../blender/cube.js"
+import {positions, normals, indices} from "../blender/ball.js"
 
 // language=GLSL
 let fragmentShader = `
@@ -160,7 +160,7 @@ function drawObjects(dc) {
 
     // Middle object
     quat.fromEuler(rotation, time * 44.24, time * 56.97, 0);
-    mat4.fromRotationTranslationScale(modelMatrix, rotation, vec3.fromValues(0, 0, 0), [0.8, 0.8, 0.8]);
+    mat4.fromRotationTranslationScale(modelMatrix, rotation, vec3.fromValues(5, 0, 0), [0.8, 0.8, 0.8]);
     mat4.multiply(modelViewProjectionMatrix, viewProjMatrix, modelMatrix);
     mat4.multiply(lightModelViewProjectionMatrix, lightViewProjMatrix, modelMatrix);
 
