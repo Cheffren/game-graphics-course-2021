@@ -29,7 +29,7 @@ let fragmentShader = `
     out vec4 outColor;       
     
     void main() {                      
-        outColor =  + pow(vViewNormal.y, 5.0) + diffuseColor * abs(vViewNormal.y) + ambientColor;
+        outColor =   pow(vViewNormal.y, 5.0) + diffuseColor * abs(vViewNormal.y) + ambientColor;
     }
 `;
 
